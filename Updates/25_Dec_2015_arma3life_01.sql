@@ -11,6 +11,32 @@ DROP database IF EXISTS arma3life;
 CREATE DATABASE arma3life DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 SELECT SLEEP(1); -- needed, otherwise the following use command will not work
 USE arma3life;
+DELIMITER $$
+--
+-- Procedures
+-- Edit arma3 and root to match a user in MySQL
+--
+CREATE DEFINER=`arma3`@`localhost` PROCEDURE `resetLifeVehicles`()
+BEGIN
+	UPDATE vehicles SET `active`= 0;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteDeadVehicles`()
+BEGIN
+	DELETE FROM `vehicles` WHERE `alive` = 0;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteOldHouses`()
+BEGIN
+  DELETE FROM `houses` WHERE `owned` = 0;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `deleteOldGangs`()
+BEGIN
+  DELETE FROM `gangs` WHERE `active` = 0;
+END$$
+
+DELIMITER ;
 
 -- --------------------------------------------------------
 
